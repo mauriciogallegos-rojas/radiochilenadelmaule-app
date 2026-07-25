@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Radio Chilena del Maule — La Radio de todos</title>
+<meta name="description" content="Escucha Radio Chilena del Maule en vivo. 91.7 FM Talca · 92.1 FM Molina · 1090 AM Valle Central. La Radio de todos.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#16418F;
+  --azul-oscuro:#0E2F6B;
+  --rojo:#D81E20;
+  --rojo-oscuro:#B01518;
+  --fondo:#F6F7FA;
+  --blanco:#FFFFFF;
+  --gris-texto:#5A6478;
+  --linea:#E3E7EF;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Archivo',system-ui,sans-serif;
+  background:var(--fondo);
+  color:var(--azul);
+  min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:max(env(safe-area-inset-top),16px) 18px max(env(safe-area-inset-bottom),18px);
+  overflow-x:hidden;
+}
+.app{width:100%;max-width:430px;display:flex;flex-direction:column;flex:1;gap:20px}
+
+/* ---------- Cabecera con logo oficial ---------- */
+header{
+  background:var(--blanco);
+  border-radius:18px;
+  border:1px solid var(--linea);
+  box-shadow:0 4px 18px rgba(22,65,143,.07);
+  padding:18px 20px 12px;
+  text-align:center;
+}
+header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+
+/* ---------- Dial de sintonía ---------- */
+.dial{
+  background:var(--blanco);
+  border:1px solid var(--linea);
+  border-radius:18px;
+  box-shadow:0 4px 18px rgba(22,65,143,.07);
+  padding:16px 16px 14px;
+}
+.dial-scale{
+  position:relative;height:46px;
+  border-top:2px solid var(--azul);
+  border-bottom:2px solid var(--azul);
+  overflow:hidden;
+  background:linear-gradient(180deg,#FBFCFE,#F1F4F9);
+}
+.ticks{position:absolute;inset:0;display:flex;justify-content:space-between;padding:0 4px}
+.ticks i{width:1px;background:rgba(22,65,143,.30);height:38%;align-self:flex-end}
+.ticks i:nth-child(5n+1){height:64%;background:rgba(22,65,143,.55)}
+.needle{
+  position:absolute;top:0;bottom:0;left:33%;width:3px;
+  background:var(--rojo);
+  box-shadow:0 0 8px rgba(216,30,32,.7);
+  transition:left 1.2s cubic-bezier(.6,0,.2,1);
+}
+.freqs{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
+.freq{flex:1;text-align:center;border-radius:10px;padding:9px 4px 8px;border:1.5px solid transparent}
+.freq small{
+  display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--azul);font-weight:800;
+}
+.freq strong{
+  display:block;font-size:27px;font-weight:800;line-height:1.05;
+  color:var(--rojo);margin-top:3px;letter-spacing:-.01em;
+}
+.freq b{display:block;font-size:11px;font-weight:800;color:var(--azul);letter-spacing:.1em;margin-top:1px}
+.freq.active{border-color:var(--rojo);background:rgba(216,30,32,.05)}
+
+/* ---------- Reproductor ---------- */
+.player{
+  background:var(--blanco);
+  border:1px solid var(--linea);
+  border-radius:18px;
+  box-shadow:0 4px 18px rgba(22,65,143,.07);
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  flex:1;justify-content:center;min-height:250px;
+  padding:26px 20px;
+}
+.live{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:800;
+  color:var(--gris-texto);
+  border:1.5px solid var(--linea);
+  border-radius:999px;padding:7px 16px;
+  transition:all .3s;
+}
+.live .dot{width:8px;height:8px;border-radius:50%;background:#C6CCD8;transition:background .3s}
+.live.on{color:var(--rojo);border-color:rgba(216,30,32,.45);background:rgba(216,30,32,.05)}
+.live.on .dot{background:var(--rojo);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(216,30,32,.45)}50%{box-shadow:0 0 0 7px rgba(216,30,32,0)}}
+
+.btn-play{
+  width:120px;height:120px;border-radius:50%;
+  border:none;
+  background:radial-gradient(circle at 32% 28%, #EE3B3D, var(--rojo) 60%, var(--rojo-oscuro) 100%);
+  color:#fff;
+  display:grid;place-items:center;cursor:pointer;
+  box-shadow:0 10px 26px rgba(216,30,32,.35), inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .15s, box-shadow .3s;
+}
+.btn-play:active{transform:scale(.95)}
+.btn-play.playing{box-shadow:0 10px 26px rgba(216,30,32,.35), 0 0 0 10px rgba(216,30,32,.08)}
+.btn-play svg{width:46px;height:46px;fill:#fff}
+.btn-play .spinner{
+  width:42px;height:42px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.35);border-top-color:#fff;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-play:focus-visible{outline:3px solid var(--azul);outline-offset:4px}
+.hint{font-size:13px;color:var(--gris-texto);text-align:center;min-height:18px}
+
+/* Ecualizador azul/rojo */
+.eq{display:flex;align-items:flex-end;gap:5px;height:34px}
+.eq i{width:5px;border-radius:3px;height:6px;opacity:.3;transition:opacity .3s;background:var(--azul)}
+.eq i:nth-child(even){background:var(--rojo)}
+.eq.on i{opacity:1;animation:bounce 1s ease-in-out infinite}
+.eq i:nth-child(1){animation-delay:0s}
+.eq i:nth-child(2){animation-delay:.15s}
+.eq i:nth-child(3){animation-delay:.3s}
+.eq i:nth-child(4){animation-delay:.45s}
+.eq i:nth-child(5){animation-delay:.2s}
+.eq i:nth-child(6){animation-delay:.05s}
+.eq i:nth-child(7){animation-delay:.35s}
+@keyframes bounce{0%,100%{height:6px}50%{height:30px}}
+@media (prefers-reduced-motion: reduce){
+  .eq.on i{animation:none;height:18px}
+  .needle{transition:none}
+  .live.on .dot{animation:none}
+}
+
+/* Volumen */
+.vol{display:flex;align-items:center;gap:14px;width:100%;max-width:300px}
+.vol svg{width:20px;height:20px;fill:var(--azul);flex-shrink:0;opacity:.7}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;
+  background:linear-gradient(to right, var(--azul) var(--fill,80%), var(--linea) var(--fill,80%));
+  outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:21px;height:21px;border-radius:50%;
+  background:#fff;border:2.5px solid var(--azul);cursor:pointer;
+  box-shadow:0 2px 6px rgba(22,65,143,.25);
+}
+input[type=range]::-moz-range-thumb{
+  width:19px;height:19px;border-radius:50%;
+  background:#fff;border:2.5px solid var(--azul);cursor:pointer;
+}
+input[type=range]:focus-visible{outline:2px solid var(--rojo);outline-offset:4px}
+
+/* ---------- Pie ---------- */
+footer{text-align:center;padding:2px 0 4px}
+footer p{font-size:11px;color:var(--gris-texto);letter-spacing:.05em;line-height:1.7}
+footer .brand{color:var(--azul);font-weight:800}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <img src="logo_header.png" alt="Radio Chilena del Maule — La Radio de todos">
+  </header>
+
+  <section class="dial" aria-label="Frecuencias de transmisión">
+    <div class="dial-scale">
+      <div class="ticks" aria-hidden="true"></div>
+      <div class="needle" id="needle"></div>
+    </div>
+    <div class="freqs">
+      <div class="freq active">
+        <small>Talca</small><strong>91.7</strong><b>FM</b>
+      </div>
+      <div class="freq">
+        <small>Molina</small><strong>92.1</strong><b>FM</b>
+      </div>
+      <div class="freq">
+        <small>Valle Central</small><strong>1090</strong><b>AM</b>
+      </div>
+    </div>
+  </section>
+
+  <main class="player">
+    <div class="live" id="live"><span class="dot"></span><span id="liveTxt">Fuera del aire</span></div>
+
+    <button class="btn-play" id="btnPlay" aria-label="Reproducir radio en vivo">
+      <svg viewBox="0 0 24 24" id="icoPlay"><path d="M8 5.5v13l11-6.5z"/></svg>
+      <svg viewBox="0 0 24 24" id="icoPause" style="display:none"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+      <div class="spinner" id="spinner" style="display:none"></div>
+    </button>
+
+    <div class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+    <div class="hint" id="hint">Toca para escuchar en vivo</div>
+
+    <div class="vol">
+      <svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+      <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volumen">
+    </div>
+  </main>
+
+  <footer>
+    <p><span class="brand">Sociedad de Comunicaciones San Agustín S.A.</span><br>
+    Talca · Molina · Valle Central — Chile</p>
+  </footer>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+const STREAM = 'https://archi-us.digitalproserver.com/chilena_maule.aac';
+
+const audio   = document.getElementById('audio');
+const btn     = document.getElementById('btnPlay');
+const icoPlay = document.getElementById('icoPlay');
+const icoPause= document.getElementById('icoPause');
+const spinner = document.getElementById('spinner');
+const live    = document.getElementById('live');
+const liveTxt = document.getElementById('liveTxt');
+const hint    = document.getElementById('hint');
+const eq      = document.getElementById('eq');
+const vol     = document.getElementById('vol');
+
+// Marcas del dial
+const ticks = document.querySelector('.ticks');
+for (let i = 0; i < 41; i++) ticks.appendChild(document.createElement('i'));
+
+let state = 'stopped'; // stopped | loading | playing
+
+function setUI(s){
+  state = s;
+  icoPlay.style.display  = s === 'stopped' ? '' : 'none';
+  icoPause.style.display = s === 'playing' ? '' : 'none';
+  spinner.style.display  = s === 'loading' ? '' : 'none';
+  btn.classList.toggle('playing', s === 'playing');
+  eq.classList.toggle('on', s === 'playing');
+  live.classList.toggle('on', s === 'playing');
+  liveTxt.textContent = s === 'playing' ? 'En vivo' : (s === 'loading' ? 'Conectando…' : 'Fuera del aire');
+  hint.textContent = s === 'playing' ? 'La Radio de todos — transmitiendo desde Talca'
+                   : s === 'loading' ? 'Sintonizando la señal…'
+                   : 'Toca para escuchar en vivo';
+  btn.setAttribute('aria-label', s === 'playing' ? 'Pausar radio' : 'Reproducir radio en vivo');
+}
+
+function play(){
+  setUI('loading');
+  // Recargar el stream asegura volver al borde en vivo (no audio atrasado)
+  audio.src = STREAM;
+  audio.load();
+  audio.play().then(()=> setUI('playing')).catch(err=>{
+    console.error(err);
+    setUI('stopped');
+    hint.textContent = 'No se pudo conectar. Revisa tu conexión e intenta de nuevo.';
+  });
+}
+
+function stop(){
+  audio.pause();
+  audio.removeAttribute('src');
+  audio.load();
+  setUI('stopped');
+}
+
+btn.addEventListener('click', ()=> state === 'stopped' ? play() : stop());
+
+audio.addEventListener('playing', ()=> setUI('playing'));
+audio.addEventListener('waiting', ()=> { if(state !== 'stopped') setUI('loading'); });
+audio.addEventListener('error', ()=>{
+  if(state === 'stopped') return;
+  setUI('loading');
+  hint.textContent = 'Señal interrumpida, reintentando…';
+  setTimeout(()=> { if(state !== 'stopped') play(); }, 4000);
+});
+audio.addEventListener('stalled', ()=>{
+  if(state === 'playing') hint.textContent = 'Señal débil, estabilizando…';
+});
+
+// Volumen
+function applyVol(){
+  audio.volume = vol.value / 100;
+  vol.style.setProperty('--fill', vol.value + '%');
+}
+vol.addEventListener('input', applyVol);
+applyVol();
+
+// Controles en pantalla de bloqueo (Media Session)
+if ('mediaSession' in navigator){
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: 'Radio Chilena del Maule',
+    artist: 'La Radio de todos · 91.7 FM · 92.1 FM · 1090 AM',
+    album: 'Transmisión en vivo',
+    artwork: [
+      { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: 'icon-512.png', sizes: '512x512', type: 'image/png' }
+    ]
+  });
+  navigator.mediaSession.setActionHandler('play',  play);
+  navigator.mediaSession.setActionHandler('pause', stop);
+  navigator.mediaSession.setActionHandler('stop',  stop);
+}
+
+// Animación sutil de la aguja mientras suena
+const needle = document.getElementById('needle');
+setInterval(()=>{
+  if(state === 'playing'){
+    const base = 33, jitter = (Math.random()-.5)*1.2;
+    needle.style.left = (base + jitter) + '%';
+  }
+}, 1400);
+
+// Service worker para instalación como app
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
