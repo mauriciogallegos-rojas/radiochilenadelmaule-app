@@ -48,6 +48,19 @@ header{
   text-align:center;
 }
 header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+.logo-text{display:flex;flex-direction:column;gap:2px;padding:6px 0}
+.logo-text .lt-radio{
+  font-size:15px;font-weight:800;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--rojo);
+}
+.logo-text .lt-nombre{
+  font-size:27px;font-weight:800;letter-spacing:-.01em;line-height:1.1;
+  color:var(--azul);
+}
+.logo-text .lt-slogan{
+  font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gris-texto);margin-top:3px;
+}
 
 /* ---------- Dial de sintonía ---------- */
 .dial{
@@ -68,13 +81,21 @@ header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
 .ticks i{width:1px;background:rgba(22,65,143,.30);height:38%;align-self:flex-end}
 .ticks i:nth-child(5n+1){height:64%;background:rgba(22,65,143,.55)}
 .needle{
-  position:absolute;top:0;bottom:0;left:33%;width:3px;
+  position:absolute;top:0;bottom:0;left:17%;width:3px;
   background:var(--rojo);
   box-shadow:0 0 8px rgba(216,30,32,.7);
-  transition:left 1.2s cubic-bezier(.6,0,.2,1);
+  transition:left 1.1s cubic-bezier(.6,0,.2,1);
 }
 .freqs{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
-.freq{flex:1;text-align:center;border-radius:10px;padding:9px 4px 8px;border:1.5px solid transparent}
+.freq{
+  flex:1;text-align:center;border-radius:10px;padding:9px 4px 8px;
+  border:1.5px solid transparent;
+  background:none;cursor:pointer;
+  font-family:inherit;
+  transition:transform .12s, border-color .25s, background .25s, box-shadow .25s;
+}
+.freq:active{transform:scale(.96)}
+.freq:focus-visible{outline:2.5px solid var(--azul);outline-offset:3px}
 .freq small{
   display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--azul);font-weight:800;
@@ -84,7 +105,14 @@ header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
   color:var(--rojo);margin-top:3px;letter-spacing:-.01em;
 }
 .freq b{display:block;font-size:11px;font-weight:800;color:var(--azul);letter-spacing:.1em;margin-top:1px}
-.freq.active{border-color:var(--rojo);background:rgba(216,30,32,.05)}
+.freq.active{
+  border-color:var(--rojo);background:rgba(216,30,32,.05);
+  box-shadow:0 3px 12px rgba(216,30,32,.12);
+}
+.dial-hint{
+  text-align:center;font-size:11px;color:var(--gris-texto);
+  margin-top:10px;letter-spacing:.04em;
+}
 
 /* ---------- Reproductor ---------- */
 .player{
@@ -92,9 +120,9 @@ header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
   border:1px solid var(--linea);
   border-radius:18px;
   box-shadow:0 4px 18px rgba(22,65,143,.07);
-  display:flex;flex-direction:column;align-items:center;gap:20px;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
   flex:1;justify-content:center;min-height:250px;
-  padding:26px 20px;
+  padding:24px 20px;
 }
 .live{
   display:inline-flex;align-items:center;gap:8px;
@@ -110,7 +138,7 @@ header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(216,30,32,.45)}50%{box-shadow:0 0 0 7px rgba(216,30,32,0)}}
 
 .btn-play{
-  width:120px;height:120px;border-radius:50%;
+  width:112px;height:112px;border-radius:50%;
   border:none;
   background:radial-gradient(circle at 32% 28%, #EE3B3D, var(--rojo) 60%, var(--rojo-oscuro) 100%);
   color:#fff;
@@ -120,7 +148,7 @@ header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
 }
 .btn-play:active{transform:scale(.95)}
 .btn-play.playing{box-shadow:0 10px 26px rgba(216,30,32,.35), 0 0 0 10px rgba(216,30,32,.08)}
-.btn-play svg{width:46px;height:46px;fill:#fff}
+.btn-play svg{width:44px;height:44px;fill:#fff}
 .btn-play .spinner{
   width:42px;height:42px;border-radius:50%;
   border:3px solid rgba(255,255,255,.35);border-top-color:#fff;
@@ -130,23 +158,19 @@ header img{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
 .btn-play:focus-visible{outline:3px solid var(--azul);outline-offset:4px}
 .hint{font-size:13px;color:var(--gris-texto);text-align:center;min-height:18px}
 
-/* Ecualizador azul/rojo */
-.eq{display:flex;align-items:flex-end;gap:5px;height:34px}
-.eq i{width:5px;border-radius:3px;height:6px;opacity:.3;transition:opacity .3s;background:var(--azul)}
-.eq i:nth-child(even){background:var(--rojo)}
-.eq.on i{opacity:1;animation:bounce 1s ease-in-out infinite}
-.eq i:nth-child(1){animation-delay:0s}
-.eq i:nth-child(2){animation-delay:.15s}
-.eq i:nth-child(3){animation-delay:.3s}
-.eq i:nth-child(4){animation-delay:.45s}
-.eq i:nth-child(5){animation-delay:.2s}
-.eq i:nth-child(6){animation-delay:.05s}
-.eq i:nth-child(7){animation-delay:.35s}
-@keyframes bounce{0%,100%{height:6px}50%{height:30px}}
-@media (prefers-reduced-motion: reduce){
-  .eq.on i{animation:none;height:18px}
-  .needle{transition:none}
-  .live.on .dot{animation:none}
+/* ---------- Espectro musical ---------- */
+.spectrum-wrap{
+  width:100%;max-width:340px;height:84px;
+  border-radius:12px;
+  background:linear-gradient(180deg,#FBFCFE,#F2F5FA);
+  border:1px solid var(--linea);
+  overflow:hidden;position:relative;
+}
+#spectrum{width:100%;height:100%;display:block}
+.spectrum-wrap::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 2px 8px rgba(22,65,143,.06);
+  border-radius:12px;
 }
 
 /* Volumen */
@@ -172,13 +196,41 @@ input[type=range]:focus-visible{outline:2px solid var(--rojo);outline-offset:4px
 footer{text-align:center;padding:2px 0 4px}
 footer p{font-size:11px;color:var(--gris-texto);letter-spacing:.05em;line-height:1.7}
 footer .brand{color:var(--azul);font-weight:800}
+
+@media (prefers-reduced-motion: reduce){
+  .needle{transition:none}
+  .live.on .dot{animation:none}
+}
 </style>
 </head>
 <body>
+<script>
+/* Respaldo del logo (debe existir antes de que el navegador intente cargar la imagen):
+   1) intenta logo_header.png junto al archivo (versión publicada)
+   2) si falla, lo carga desde GitHub Pages (para pruebas locales)
+   3) si tampoco hay conexión, muestra el nombre en texto */
+const LOGO_REMOTO = 'https://mauriciogallegos-rojas.github.io/radiochilenadelmaule-app/logo_header.png';
+function logoFallback(img){
+  if (img.src !== LOGO_REMOTO && !img.dataset.retried){
+    img.dataset.retried = '1';
+    img.src = LOGO_REMOTO;
+  } else {
+    img.style.display = 'none';
+    document.getElementById('logoText').style.display = 'flex';
+  }
+}
+</script>
 <div class="app">
 
   <header>
-    <img src="logo_header.png" alt="Radio Chilena del Maule — La Radio de todos">
+    <img src="logo_header.png" id="logoImg"
+         alt="Radio Chilena del Maule — La Radio de todos"
+         onerror="logoFallback(this)">
+    <div class="logo-text" id="logoText" style="display:none">
+      <span class="lt-radio">Radio</span>
+      <span class="lt-nombre">Chilena del Maule</span>
+      <span class="lt-slogan">La Radio de todos</span>
+    </div>
   </header>
 
   <section class="dial" aria-label="Frecuencias de transmisión">
@@ -186,17 +238,18 @@ footer .brand{color:var(--azul);font-weight:800}
       <div class="ticks" aria-hidden="true"></div>
       <div class="needle" id="needle"></div>
     </div>
-    <div class="freqs">
-      <div class="freq active">
+    <div class="freqs" role="group" aria-label="Elige una frecuencia">
+      <button class="freq active" data-freq="91.7" data-pos="17" data-label="Talca 91.7 FM">
         <small>Talca</small><strong>91.7</strong><b>FM</b>
-      </div>
-      <div class="freq">
+      </button>
+      <button class="freq" data-freq="92.1" data-pos="50" data-label="Molina 92.1 FM">
         <small>Molina</small><strong>92.1</strong><b>FM</b>
-      </div>
-      <div class="freq">
+      </button>
+      <button class="freq" data-freq="1090" data-pos="83" data-label="Valle Central 1090 AM">
         <small>Valle Central</small><strong>1090</strong><b>AM</b>
-      </div>
+      </button>
     </div>
+    <div class="dial-hint" id="dialHint">Toca una frecuencia para sintonizar</div>
   </section>
 
   <main class="player">
@@ -208,7 +261,9 @@ footer .brand{color:var(--azul);font-weight:800}
       <div class="spinner" id="spinner" style="display:none"></div>
     </button>
 
-    <div class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="spectrum-wrap" aria-hidden="true">
+      <canvas id="spectrum"></canvas>
+    </div>
 
     <div class="hint" id="hint">Toca para escuchar en vivo</div>
 
@@ -227,24 +282,47 @@ footer .brand{color:var(--azul);font-weight:800}
 <audio id="audio" preload="none"></audio>
 
 <script>
-const STREAM = 'https://archi-us.digitalproserver.com/chilena_maule.aac';
+/* =========================================================
+   Radio Chilena del Maule — v2
+   · Diales clickeables (91.7 / 92.1 / 1090)
+   · Espectro musical real con Web Audio API
+     (con respaldo animado si el servidor bloquea el análisis)
+   ========================================================= */
 
-const audio   = document.getElementById('audio');
-const btn     = document.getElementById('btnPlay');
-const icoPlay = document.getElementById('icoPlay');
-const icoPause= document.getElementById('icoPause');
-const spinner = document.getElementById('spinner');
-const live    = document.getElementById('live');
-const liveTxt = document.getElementById('liveTxt');
-const hint    = document.getElementById('hint');
-const eq      = document.getElementById('eq');
-const vol     = document.getElementById('vol');
+/* Si algún día cada frecuencia tiene su propio streaming,
+   basta con cambiar la URL correspondiente aquí: */
+const STREAMS = {
+  '91.7': 'https://archi-us.digitalproserver.com/chilena_maule.aac',
+  '92.1': 'https://archi-us.digitalproserver.com/chilena_maule.aac',
+  '1090': 'https://archi-us.digitalproserver.com/chilena_maule.aac'
+};
+
+const audio    = document.getElementById('audio');
+const btn      = document.getElementById('btnPlay');
+const icoPlay  = document.getElementById('icoPlay');
+const icoPause = document.getElementById('icoPause');
+const spinner  = document.getElementById('spinner');
+const live     = document.getElementById('live');
+const liveTxt  = document.getElementById('liveTxt');
+const hint     = document.getElementById('hint');
+const vol      = document.getElementById('vol');
+const needle   = document.getElementById('needle');
+const dialHint = document.getElementById('dialHint');
+const freqBtns = Array.from(document.querySelectorAll('.freq'));
 
 // Marcas del dial
 const ticks = document.querySelector('.ticks');
 for (let i = 0; i < 41; i++) ticks.appendChild(document.createElement('i'));
 
-let state = 'stopped'; // stopped | loading | playing
+let state = 'stopped';            // stopped | loading | playing
+let currentFreq = '91.7';
+let corsBlocked = false;          // true → el servidor no permite analizar el audio
+let triedCors   = false;
+
+function currentLabel(){
+  const b = freqBtns.find(x => x.dataset.freq === currentFreq);
+  return b ? b.dataset.label : 'Radio Chilena del Maule';
+}
 
 function setUI(s){
   state = s;
@@ -252,22 +330,39 @@ function setUI(s){
   icoPause.style.display = s === 'playing' ? '' : 'none';
   spinner.style.display  = s === 'loading' ? '' : 'none';
   btn.classList.toggle('playing', s === 'playing');
-  eq.classList.toggle('on', s === 'playing');
   live.classList.toggle('on', s === 'playing');
   liveTxt.textContent = s === 'playing' ? 'En vivo' : (s === 'loading' ? 'Conectando…' : 'Fuera del aire');
-  hint.textContent = s === 'playing' ? 'La Radio de todos — transmitiendo desde Talca'
-                   : s === 'loading' ? 'Sintonizando la señal…'
+  hint.textContent = s === 'playing' ? 'Sintonizado: ' + currentLabel() + ' — La Radio de todos'
+                   : s === 'loading' ? 'Sintonizando ' + currentLabel() + '…'
                    : 'Toca para escuchar en vivo';
   btn.setAttribute('aria-label', s === 'playing' ? 'Pausar radio' : 'Reproducir radio en vivo');
+  updateMediaSession();
 }
 
+/* ---------- Reproducción ---------- */
 function play(){
   setUI('loading');
-  // Recargar el stream asegura volver al borde en vivo (no audio atrasado)
-  audio.src = STREAM;
+  // Primer intento: con crossOrigin para poder analizar el audio real.
+  // Si el servidor lo rechaza, el evento 'error' hace el reintento sin CORS.
+  if (!corsBlocked){
+    audio.crossOrigin = 'anonymous';
+    triedCors = true;
+  } else {
+    audio.removeAttribute('crossorigin');
+  }
+  audio.src = STREAMS[currentFreq];
   audio.load();
-  audio.play().then(()=> setUI('playing')).catch(err=>{
+  audio.play().then(()=>{
+    setUI('playing');
+    if (!corsBlocked) initRealSpectrum();
+  }).catch(err=>{
     console.error(err);
+    if (triedCors && !corsBlocked){
+      // El bloqueo CORS puede aparecer como fallo de reproducción: reintentar sin análisis
+      corsBlocked = true;
+      play();
+      return;
+    }
     setUI('stopped');
     hint.textContent = 'No se pudo conectar. Revisa tu conexión e intenta de nuevo.';
   });
@@ -280,12 +375,34 @@ function stop(){
   setUI('stopped');
 }
 
+function tune(freqBtn){
+  const freq = freqBtn.dataset.freq;
+  freqBtns.forEach(b => b.classList.toggle('active', b === freqBtn));
+  needle.style.left = freqBtn.dataset.pos + '%';
+  dialHint.textContent = 'Sintonizando ' + freqBtn.dataset.label;
+
+  const changed = freq !== currentFreq;
+  currentFreq = freq;
+
+  if (state === 'stopped' || changed){
+    if (state !== 'stopped') { audio.pause(); }
+    play();
+  }
+}
+
+freqBtns.forEach(b => b.addEventListener('click', ()=> tune(b)));
 btn.addEventListener('click', ()=> state === 'stopped' ? play() : stop());
 
 audio.addEventListener('playing', ()=> setUI('playing'));
 audio.addEventListener('waiting', ()=> { if(state !== 'stopped') setUI('loading'); });
 audio.addEventListener('error', ()=>{
   if(state === 'stopped') return;
+  if (triedCors && !corsBlocked){
+    // El servidor rechazó la carga con crossOrigin: reintentar en modo normal
+    corsBlocked = true;
+    play();
+    return;
+  }
   setUI('loading');
   hint.textContent = 'Señal interrumpida, reintentando…';
   setTimeout(()=> { if(state !== 'stopped') play(); }, 4000);
@@ -294,7 +411,7 @@ audio.addEventListener('stalled', ()=>{
   if(state === 'playing') hint.textContent = 'Señal débil, estabilizando…';
 });
 
-// Volumen
+/* ---------- Volumen ---------- */
 function applyVol(){
   audio.volume = vol.value / 100;
   vol.style.setProperty('--fill', vol.value + '%');
@@ -302,32 +419,168 @@ function applyVol(){
 vol.addEventListener('input', applyVol);
 applyVol();
 
-// Controles en pantalla de bloqueo (Media Session)
-if ('mediaSession' in navigator){
+/* ---------- Media Session (pantalla de bloqueo) ---------- */
+function updateMediaSession(){
+  if (!('mediaSession' in navigator)) return;
   navigator.mediaSession.metadata = new MediaMetadata({
     title: 'Radio Chilena del Maule',
-    artist: 'La Radio de todos · 91.7 FM · 92.1 FM · 1090 AM',
+    artist: currentLabel() + ' · La Radio de todos',
     album: 'Transmisión en vivo',
     artwork: [
       { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
       { src: 'icon-512.png', sizes: '512x512', type: 'image/png' }
     ]
   });
+}
+if ('mediaSession' in navigator){
   navigator.mediaSession.setActionHandler('play',  play);
   navigator.mediaSession.setActionHandler('pause', stop);
   navigator.mediaSession.setActionHandler('stop',  stop);
 }
 
-// Animación sutil de la aguja mientras suena
-const needle = document.getElementById('needle');
+/* ---------- Aguja: vibración sutil mientras suena ---------- */
 setInterval(()=>{
   if(state === 'playing'){
-    const base = 33, jitter = (Math.random()-.5)*1.2;
+    const active = freqBtns.find(b => b.classList.contains('active'));
+    const base = active ? parseFloat(active.dataset.pos) : 17;
+    const jitter = (Math.random()-.5)*1.2;
     needle.style.left = (base + jitter) + '%';
   }
 }, 1400);
 
-// Service worker para instalación como app
+/* =========================================================
+   ESPECTRO MUSICAL
+   Modo real: AnalyserNode leyendo las frecuencias del stream.
+   Modo respaldo: animación rítmica si el servidor bloquea CORS.
+   ========================================================= */
+const canvas = document.getElementById('spectrum');
+const ctx = canvas.getContext('2d');
+const N_BARS = 32;
+
+let audioCtx = null, analyser = null, sourceNode = null;
+let freqData = null;
+let realMode = false;          // true cuando el análisis real funciona
+let zeroFrames = 0;            // detector de "análisis mudo" (CORS opaco)
+const smooth = new Float32Array(N_BARS);   // suavizado visual
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function sizeCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const r = canvas.parentElement.getBoundingClientRect();
+  canvas.width  = Math.round(r.width  * dpr);
+  canvas.height = Math.round(r.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', sizeCanvas);
+sizeCanvas();
+
+function initRealSpectrum(){
+  if (sourceNode || corsBlocked) return;   // solo una vez
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    sourceNode = audioCtx.createMediaElementSource(audio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 128;                 // 64 bandas
+    analyser.smoothingTimeConstant = 0.72;
+    sourceNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    realMode = true;
+    zeroFrames = 0;
+  }catch(e){
+    console.warn('Análisis de audio no disponible, usando espectro animado:', e);
+    realMode = false;
+  }
+}
+
+/* Colores de barra: degradado institucional azul → rojo */
+function barColor(i, h){
+  const g = ctx.createLinearGradient(0, h, 0, 0);
+  if (i % 2 === 0){
+    g.addColorStop(0, '#16418F'); g.addColorStop(1, '#3F6FD0');
+  } else {
+    g.addColorStop(0, '#D81E20'); g.addColorStop(1, '#F0575A');
+  }
+  return g;
+}
+
+/* Espectro de respaldo: ondas superpuestas con carácter rítmico */
+function fakeLevels(t){
+  const levels = new Float32Array(N_BARS);
+  const beat = Math.pow(Math.max(0, Math.sin(t * 2.1)), 3);   // pulso tipo batería
+  for (let i = 0; i < N_BARS; i++){
+    const x = i / N_BARS;
+    const bass  = Math.exp(-x * 3.2) * (0.55 + 0.45 * beat);
+    const mids  = 0.3 * Math.abs(Math.sin(t * 1.6 + i * 0.9));
+    const highs = 0.18 * Math.abs(Math.sin(t * 3.3 + i * 2.1)) * x;
+    const rnd   = 0.10 * Math.random();
+    levels[i] = Math.min(1, bass + mids + highs + rnd);
+  }
+  return levels;
+}
+
+function draw(now){
+  requestAnimationFrame(draw);
+  const w = canvas.parentElement.clientWidth;
+  const h = canvas.parentElement.clientHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  const gap = 3;
+  const bw = (w - gap * (N_BARS + 1)) / N_BARS;
+  const t = now / 1000;
+
+  let levels;
+
+  if (state === 'playing' && realMode && analyser){
+    analyser.getByteFrequencyData(freqData);
+    // ¿Está entregando puros ceros aunque suena? → CORS opaco: cambiar a respaldo
+    let sum = 0;
+    for (let i = 0; i < freqData.length; i++) sum += freqData[i];
+    if (sum === 0){ if (++zeroFrames > 150) realMode = false; }
+    else zeroFrames = 0;
+
+    levels = new Float32Array(N_BARS);
+    const usable = Math.floor(freqData.length * 0.8);   // recorta agudos vacíos
+    for (let i = 0; i < N_BARS; i++){
+      const a = Math.floor(i     / N_BARS * usable);
+      const b = Math.max(a + 1, Math.floor((i + 1) / N_BARS * usable));
+      let m = 0;
+      for (let j = a; j < b; j++) m = Math.max(m, freqData[j]);
+      levels[i] = m / 255;
+    }
+  } else if (state === 'playing'){
+    levels = reduceMotion ? null : fakeLevels(t);
+    if (reduceMotion){
+      levels = new Float32Array(N_BARS).fill(0.35);
+    }
+  } else {
+    levels = new Float32Array(N_BARS).fill(0);   // en reposo: línea base
+  }
+
+  for (let i = 0; i < N_BARS; i++){
+    // Suavizado: sube rápido, baja con gravedad
+    const target = levels[i];
+    smooth[i] = target > smooth[i]
+      ? smooth[i] + (target - smooth[i]) * 0.55
+      : smooth[i] + (target - smooth[i]) * 0.12;
+
+    const bh = Math.max(3, smooth[i] * (h - 12));
+    const x = gap + i * (bw + gap);
+    const y = h - 6 - bh;
+    ctx.fillStyle = barColor(i, h);
+    if (ctx.roundRect){
+      ctx.beginPath();
+      ctx.roundRect(x, y, bw, bh, 2.5);
+      ctx.fill();
+    } else {
+      ctx.fillRect(x, y, bw, bh);   // navegadores antiguos
+    }
+  }
+}
+requestAnimationFrame(draw);
+
+/* ---------- Service worker (instalación como app) ---------- */
 if ('serviceWorker' in navigator){
   window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }

@@ -1,31 +1,26 @@
 {
   "name": "Radio Chilena del Maule",
-  "short_name": "R. Chilena",
-  "description": "Escucha Radio Chilena del Maule en vivo: 91.7 FM Talca, 92.1 FM Molina y 1090 AM Valle Central.",
+  "short_name": "Radio Chilena",
+  "description": "Escucha Radio Chilena del Maule en vivo. 91.7 FM Talca · 92.1 FM Molina · 1090 AM Valle Central. La Radio de todos.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F6F7FA",
   "theme_color": "#FFFFFF",
-  "lang": "es-CL",
-  "categories": [
-    "music",
-    "entertainment",
-    "news"
-  ],
+  "lang": "es",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
