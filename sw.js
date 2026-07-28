@@ -2,7 +2,7 @@
    Guarda en caché la interfaz (no el streaming) para que la app
    abra al instante y funcione aunque la señal de datos sea débil. */
 
-const CACHE = 'rcm-v2';
+const CACHE = 'rcm-v3';
 const ASSETS = [
   './',
   './index.html',

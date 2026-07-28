@@ -275,7 +275,8 @@ function logoFallback(img){
 
   <footer>
     <p><span class="brand">Sociedad de Comunicaciones San Agustín S.A.</span><br>
-    Talca · Molina · Valle Central — Chile</p>
+    Talca · Molina · Valle Central — Chile<br>
+    <span style="opacity:.45;font-size:10px">v3.0</span></p>
   </footer>
 </div>
 
@@ -507,16 +508,18 @@ function barColor(i, h){
   return g;
 }
 
-/* Espectro de respaldo: ondas superpuestas con carácter rítmico */
+/* Espectro de respaldo: ondas superpuestas con carácter rítmico.
+   Si el sistema pide menos animación, se mueve más suave pero NUNCA se congela. */
 function fakeLevels(t){
   const levels = new Float32Array(N_BARS);
-  const beat = Math.pow(Math.max(0, Math.sin(t * 2.1)), 3);   // pulso tipo batería
+  const speed = reduceMotion ? 0.45 : 1;                       // más calmado, no estático
+  const beat = Math.pow(Math.max(0, Math.sin(t * 2.1 * speed)), 3);   // pulso tipo batería
   for (let i = 0; i < N_BARS; i++){
     const x = i / N_BARS;
     const bass  = Math.exp(-x * 3.2) * (0.55 + 0.45 * beat);
-    const mids  = 0.3 * Math.abs(Math.sin(t * 1.6 + i * 0.9));
-    const highs = 0.18 * Math.abs(Math.sin(t * 3.3 + i * 2.1)) * x;
-    const rnd   = 0.10 * Math.random();
+    const mids  = 0.3 * Math.abs(Math.sin(t * 1.6 * speed + i * 0.9));
+    const highs = 0.18 * Math.abs(Math.sin(t * 3.3 * speed + i * 2.1)) * x;
+    const rnd   = reduceMotion ? 0 : 0.10 * Math.random();
     levels[i] = Math.min(1, bass + mids + highs + rnd);
   }
   return levels;
@@ -544,7 +547,7 @@ function draw(now){
       // Mientras el análisis real no entregue datos, mostrar el
       // espectro animado de inmediato (nada de barras planas).
       if (++zeroFrames > 60) realMode = false;
-      levels = reduceMotion ? new Float32Array(N_BARS).fill(0.35) : fakeLevels(t);
+      levels = fakeLevels(t);
     } else {
       zeroFrames = 0;
       levels = new Float32Array(N_BARS);
@@ -557,11 +560,10 @@ function draw(now){
         levels[i] = m / 255;
       }
     }
-  } else if (state === 'playing'){
-    levels = reduceMotion ? null : fakeLevels(t);
-    if (reduceMotion){
-      levels = new Float32Array(N_BARS).fill(0.35);
-    }
+  } else if (state === 'playing' || (!audio.paused && audio.readyState > 2)){
+    // Respaldo doble: si por cualquier motivo el estado interno no coincide,
+    // basta con que el audio esté sonando para que el espectro baile.
+    levels = fakeLevels(t);
   } else {
     levels = new Float32Array(N_BARS).fill(0);   // en reposo: línea base
   }
