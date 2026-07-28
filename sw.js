@@ -2,7 +2,7 @@
    Guarda en caché la interfaz (no el streaming) para que la app
    abra al instante y funcione aunque la señal de datos sea débil. */
 
-const CACHE = 'rcm-v1';
+const CACHE = 'rcm-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -37,7 +37,25 @@ self.addEventListener('fetch', (e) => {
   // El streaming de audio NUNCA se cachea: siempre directo a internet
   if (url.hostname.includes('digitalproserver.com')) return;
 
-  // Interfaz: caché primero, red como respaldo (y actualiza el caché)
+  const esHTML = e.request.mode === 'navigate' ||
+                 url.pathname.endsWith('.html') || url.pathname.endsWith('/');
+
+  if (esHTML){
+    // HTML: RED PRIMERO → las actualizaciones de la app llegan siempre.
+    // El caché solo se usa si no hay internet.
+    e.respondWith(
+      fetch(e.request)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(e.request, copy));
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // Recursos (imágenes, íconos): caché primero, actualizando en segundo plano
   e.respondWith(
     caches.match(e.request).then((cached) => {
       const fetched = fetch(e.request)
